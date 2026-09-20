@@ -172,7 +172,7 @@ textarea{min-height:105px;resize:vertical}
 
 .note{font-size:11px!important;margin-top:8px!important}
 .file-types{font-weight:400;color:#8a9aad;font-size:12px}
-#candidate-status{font-size:15px!important;font-weight:600;color:var(--green);margin-top:10px!important;min-height:18px}
+#candidate-status,#employer-status{font-size:15px!important;font-weight:600;color:var(--green);margin-top:10px!important;min-height:18px}
 
 /* CONTACT */
 
@@ -486,6 +486,7 @@ footer{border-top:1px solid #dce6ed;background:#f8fbfd;padding:22px 0}
           </div>
 
           <button class="submit" type="submit">Submit Hiring Request</button>
+          <p class="note" id="employer-status" aria-live="polite"></p>
 
         </form>
 
@@ -657,9 +658,78 @@ employerPhone.addEventListener('input', () => {
 });
 
 // Employer and Contact forms will be connected separately.
-document.getElementById('hire').addEventListener('submit', e => {
+const EMPLOYER_ENDPOINT = 'https://script.google.com/macros/s/AKfycbzat4lK-h5DGW68Rp1ccPek1h_gNvucN9x6bZyN9OgWOKV80rpS3GKMnNlH1bdJYMfb-A/exec';
+const employerStatus = document.getElementById('employer-status');
+
+employerForm.addEventListener('submit', async (e) => {
   e.preventDefault();
-  alert('Employer form connection is coming next.');
+
+  const submitButton = employerForm.querySelector('button[type="submit"]');
+  const fileInput = employerForm.elements['employerFile'];
+  const uploadedFile = fileInput.files[0];
+
+  if (uploadedFile) {
+    const allowedTypes = [
+      'application/pdf',
+      'application/msword',
+      'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+    ];
+    const allowedExtensions = /\.(pdf|doc|docx)$/i;
+
+    if (!allowedTypes.includes(uploadedFile.type) && !allowedExtensions.test(uploadedFile.name)) {
+      employerStatus.textContent = 'Please upload a PDF, DOC, or DOCX file.';
+      return;
+    }
+  }
+
+  submitButton.disabled = true;
+  submitButton.textContent = 'Submitting...';
+  employerStatus.textContent = '';
+
+  try {
+    let filePayload = null;
+
+    if (uploadedFile) {
+      filePayload = {
+        name: uploadedFile.name,
+        type: uploadedFile.type || 'application/octet-stream',
+        data: await fileToBase64(uploadedFile)
+      };
+    }
+
+    const payload = {
+      company: employerForm.elements['company'].value.trim(),
+      contact: employerForm.elements['contact'].value.trim(),
+      email: employerForm.elements['email'].value.trim(),
+      phone: employerForm.elements['phone'].value.trim(),
+      position: employerForm.elements['position'].value.trim(),
+      location: employerForm.elements['location'].value.trim(),
+      employment: employerForm.elements['employment'].value,
+      requirements: employerForm.elements['requirements'].value.trim(),
+      file: filePayload
+    };
+
+    const response = await fetch(EMPLOYER_ENDPOINT, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify(payload)
+    });
+
+    const result = await response.json();
+
+    if (!result.success) {
+      throw new Error(result.message || 'Submission failed.');
+    }
+
+    employerForm.reset();
+    employerStatus.textContent = 'Thank you. Your hiring request was submitted successfully.';
+  } catch (error) {
+    console.error(error);
+    employerStatus.textContent = 'Your request could not be sent. Please try again.';
+  } finally {
+    submitButton.disabled = false;
+    submitButton.textContent = 'Submit Hiring Request';
+  }
 });
 
 document.querySelector('.contact-box').addEventListener('submit', e => {
