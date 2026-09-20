@@ -172,7 +172,7 @@ textarea{min-height:105px;resize:vertical}
 
 .note{font-size:11px!important;margin-top:8px!important}
 .file-types{font-weight:400;color:#8a9aad;font-size:12px}
-#candidate-status,#employer-status{font-size:15px!important;font-weight:600;color:var(--green);margin-top:10px!important;min-height:18px}
+#candidate-status,#employer-status,#contact-status{font-size:15px!important;font-weight:600;color:var(--green);margin-top:10px!important;min-height:18px}
 
 /* CONTACT */
 
@@ -515,6 +515,7 @@ footer{border-top:1px solid #dce6ed;background:#f8fbfd;padding:22px 0}
         <div style="margin-top:14px"><label>Message *</label><textarea required name="message"></textarea></div>
 
         <button class="submit" type="submit">Send Message</button>
+        <p class="note" id="contact-status" aria-live="polite"></p>
 
       </form>
 
@@ -732,9 +733,46 @@ employerForm.addEventListener('submit', async (e) => {
   }
 });
 
-document.querySelector('.contact-box').addEventListener('submit', e => {
+const CONTACT_ENDPOINT = 'https://script.google.com/macros/s/AKfycbwKHpY_GEJi634Kk_0OQQFP_LsAuSXrrxMrJ2_XoIOE4JpuhaV8ifpE6ra_CboD2_uv/exec';
+const contactForm = document.querySelector('.contact-box');
+const contactStatus = document.getElementById('contact-status');
+
+contactForm.addEventListener('submit', async (e) => {
   e.preventDefault();
-  alert('Contact form connection is coming next.');
+
+  const submitButton = contactForm.querySelector('button[type="submit"]');
+  submitButton.disabled = true;
+  submitButton.textContent = 'Sending...';
+  contactStatus.textContent = '';
+
+  try {
+    const payload = {
+      name: contactForm.elements['name'].value.trim(),
+      email: contactForm.elements['email'].value.trim(),
+      message: contactForm.elements['message'].value.trim()
+    };
+
+    const response = await fetch(CONTACT_ENDPOINT, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify(payload)
+    });
+
+    const result = await response.json();
+
+    if (!result.success) {
+      throw new Error(result.message || 'Submission failed.');
+    }
+
+    contactForm.reset();
+    contactStatus.textContent = 'Thank you. Your message was sent successfully.';
+  } catch (error) {
+    console.error(error);
+    contactStatus.textContent = 'Your message could not be sent. Please try again.';
+  } finally {
+    submitButton.disabled = false;
+    submitButton.textContent = 'Send Message';
+  }
 });
 </script>
 
