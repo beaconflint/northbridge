@@ -39,18 +39,19 @@ nav a.active{border-bottom:3px solid var(--green)}
 h1{font-size:55px;line-height:1.02;letter-spacing:-2.6px;margin:0}
 h1 span{color:var(--green)}
 .lead{font-size:22px;line-height:1.35;color:var(--text);margin:16px 0 0;max-width:520px}
-.hero-photo{overflow:hidden;position:relative;margin-left:-95px;width:calc(100% + 95px)}
-.hero-photo::before{
+.hero-photo{overflow:visible;position:relative;margin-left:-95px;width:calc(100% + 95px)}
+.hero-photo::after{
   content:"";
   position:absolute;
-  z-index:2;
+  z-index:3;
   top:0;
   bottom:0;
-  left:-65px;
-  width:180px;
+  left:-90px;
+  width:210px;
   pointer-events:none;
-  background:linear-gradient(90deg,#f7fafb 0%,rgba(247,250,251,.92) 18%,rgba(247,250,251,.60) 48%,rgba(247,250,251,.20) 76%,rgba(247,250,251,0) 100%);
+  background:linear-gradient(90deg,#f7fafb 0%,rgba(247,250,251,.96) 22%,rgba(247,250,251,.72) 48%,rgba(247,250,251,.28) 72%,rgba(247,250,251,0) 100%);
 }
+.hero-photo img{clip-path:inset(0);position:relative;z-index:1}
 .hero-photo img{width:100%;height:100%;display:block;object-fit:cover;object-position:center}
 
 /* AUDIENCE */
@@ -119,7 +120,7 @@ footer{border-top:1px solid #dce6ed;background:#f8fbfd;padding:22px 0}
   .hero-grid{grid-template-columns:1fr}
   .hero-copy{padding:45px 0}
   .hero-photo{height:380px;margin-left:0;width:100%}
-  .hero-photo::before{display:none}
+  .hero-photo::before,.hero-photo::after{display:none}
   .hero-photo img{transform:none}
   .aud-grid,.forms{grid-template-columns:1fr}
 }
