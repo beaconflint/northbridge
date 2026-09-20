@@ -172,6 +172,7 @@ textarea{min-height:105px;resize:vertical}
 
 .note{font-size:11px!important;margin-top:8px!important}
 .file-types{font-weight:400;color:#8a9aad;font-size:12px}
+#candidate-status{font-size:15px!important;font-weight:600;color:var(--green);margin-top:10px!important;min-height:18px}
 
 /* CONTACT */
 
@@ -433,7 +434,7 @@ footer{border-top:1px solid #dce6ed;background:#f8fbfd;padding:22px 0}
 
             <div class="field"><label>Email *</label><input required type="email" name="email"></div>
 
-            <div class="field"><label>Phone *</label><input required type="tel" name="phone"></div>
+            <div class="field"><label>Phone *</label><input required type="tel" name="phone" inputmode="numeric" autocomplete="tel" maxlength="14" placeholder="(123) 456-7890" pattern="\([0-9]{3}\) [0-9]{3}-[0-9]{4}" title="Enter a 10-digit phone number"></div>
 
             <div class="field"><label>Location *</label><input required name="location"></div>
 
@@ -546,6 +547,18 @@ const CANDIDATE_ENDPOINT = 'https://script.google.com/macros/s/AKfycbzkBBRbVpuLU
 
 const candidateForm = document.getElementById('apply');
 const candidateStatus = document.getElementById('candidate-status');
+const candidatePhone = candidateForm.elements['phone'];
+
+candidatePhone.addEventListener('input', () => {
+  const digits = candidatePhone.value.replace(/\D/g, '').slice(0, 10);
+  if (digits.length <= 3) {
+    candidatePhone.value = digits;
+  } else if (digits.length <= 6) {
+    candidatePhone.value = `(${digits.slice(0,3)}) ${digits.slice(3)}`;
+  } else {
+    candidatePhone.value = `(${digits.slice(0,3)}) ${digits.slice(3,6)}-${digits.slice(6)}`;
+  }
+});
 
 candidateForm.addEventListener('submit', async (e) => {
   e.preventDefault();
