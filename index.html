@@ -468,19 +468,20 @@ footer{border-top:1px solid #dce6ed;background:#f8fbfd;padding:22px 0}
 
             <div class="field"><label>Email *</label><input required type="email" name="email"></div>
 
-            <div class="field"><label>Phone (optional)</label><input type="tel" name="phone"></div>
+            <div class="field"><label>Phone</label><input type="tel" name="phone"></div>
 
             <div class="field full"><label>Position / Worker Needed *</label><input required name="position"></div>
 
-            <div class="field"><label>Location / Remote *</label><input required name="location"></div>
+            <div class="field"><label>Location *</label><input required name="location"></div>
 
-            <div class="field"><label>Employment Type *</label>
+            <div class="field"><label>Employment Type</label>
 
-              <select required name="employment"><option value="">Select</option><option>Full-time</option><option>Part-time</option><option>Contract</option><option>Temporary</option><option>Other</option></select>
+              <select name="employment"><option value="">Select</option><option>Full-time</option><option>Part-time</option><option>Contract</option><option>Temporary</option><option>Other</option></select>
 
             </div>
 
             <div class="field full"><label>Job Description / Requirements *</label><textarea required name="requirements"></textarea></div>
+            <div class="field full"><label>Upload File <span class="file-types">(.pdf, .doc, .docx)</span></label><input type="file" name="employerFile" accept=".pdf,.doc,.docx"></div>
 
           </div>
 
