@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NorthBridge Recruiting</title>
+<meta name="description" content="Simple recruiting and staffing solutions for growing businesses.">
+<style>
+:root{--navy:#082f61;--green:#08745e;--text:#587091;--line:#d8e3eb;--pale:#f4faf8;--blue:#f4f8fc}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;font-family:Arial,Helvetica,sans-serif;color:var(--navy);background:#fff}a{text-decoration:none;color:inherit}
+.wrap{width:min(1440px,calc(100% - 96px));margin:0 auto}
+header{height:86px;background:#fff;border-bottom:1px solid #edf2f5;display:flex;align-items:center;position:sticky;top:0;z-index:30}
+.nav{display:flex;align-items:center;gap:35px}.identity{margin-right:auto}.brand{font-size:28px;font-weight:800;letter-spacing:-.6px}.brandline{font-size:11px;letter-spacing:3.6px;color:#637a99;margin-top:5px}.nav a{font-size:15px}.nav a:hover{color:var(--green)}.nav .active{position:relative}.nav .active:after{content:"";position:absolute;height:3px;left:0;right:0;bottom:-18px;background:var(--green);border-radius:3px}
+
+/* HERO — uses the approved image as a real image file */
+.hero{height:430px;background:#f8fbfc;overflow:hidden}.hero-grid{height:100%;display:grid;grid-template-columns:43% 57%;align-items:stretch}
+.hero-copy{padding:43px 0 20px 12px;display:flex;flex-direction:column;justify-content:center}.kicker{font-size:13px;letter-spacing:4px;font-weight:700;color:#526d93;margin-bottom:18px}
+h1{font-size:57px;line-height:1.02;letter-spacing:-2.3px;margin:0;color:var(--navy)}h1 span{color:var(--green)}.lead{font-size:22px;line-height:1.35;color:var(--text);margin:13px 0 18px}
+.buttons{display:flex;gap:18px}.btn{min-height:58px;padding:0 28px;border-radius:8px;display:inline-flex;align-items:center;justify-content:center;gap:22px;font-size:18px;font-weight:800;border:1.5px solid var(--green);cursor:pointer}.green{background:var(--green);color:#fff}.outline{background:#fff;color:var(--green)}.navy{background:var(--navy);border-color:var(--navy);color:#fff}.arrow{font-size:27px;font-weight:400}
+.hero-photo{height:100%;overflow:hidden}.hero-photo img{width:100%;height:100%;display:block;object-fit:cover;object-position:center}
+
+/* Candidate / Employer cards */
+.audience{padding:14px 0 16px}.aud-grid{display:grid;grid-template-columns:1fr 1fr;gap:46px}.aud{min-height:224px;border-radius:8px;padding:22px 42px;display:grid;grid-template-columns:150px 1fr;align-items:center}.candidate{background:linear-gradient(110deg,#eff9f5,#f8fbfa)}.employer{background:linear-gradient(110deg,#f2f7fc,#f8fbfd)}
+.circle{width:120px;height:120px;border-radius:50%;background:#e4f2ef;display:grid;place-items:center}.person{width:54px;height:60px;position:relative}.person:before{content:"";position:absolute;left:15px;top:0;width:23px;height:23px;border:4px solid var(--navy);border-radius:50%}.person:after{content:"";position:absolute;left:3px;bottom:0;width:48px;height:31px;border:4px solid var(--navy);border-radius:30px 30px 0 0}.brief{width:58px;height:46px;border:4px solid var(--navy);border-radius:7px;position:relative}.brief:before{content:"";position:absolute;left:16px;top:-16px;width:20px;height:14px;border:4px solid var(--navy);border-bottom:0;border-radius:6px 6px 0 0}.brief:after{content:"";position:absolute;left:-4px;right:-4px;top:15px;border-top:4px solid var(--navy)}
+.aud h2{font-size:31px;margin:0 0 8px}.aud p{font-size:19px;line-height:1.35;color:var(--text);margin:0 0 18px}.aud .btn{width:315px}
+
+/* Process */
+.steps{padding:5px 0 28px}.step-grid{display:grid;grid-template-columns:repeat(3,1fr)}.step{text-align:center;padding:0 38px}.step+.step{border-left:1px solid #cddae3}.step-icon{width:70px;height:70px;margin:0 auto 10px;border-radius:50%;background:#eff5f8;display:grid;place-items:center;color:var(--navy);font-size:32px}.docicon{width:28px;height:35px;border:3px solid currentColor;position:relative}.docicon:before,.docicon:after{content:"";position:absolute;left:5px;right:5px;border-top:2px solid currentColor}.docicon:before{top:12px}.docicon:after{top:20px}.peopleicon{font-size:34px}.targeticon{font-size:38px}.step h3{font-size:22px;margin:0 0 5px}.step p{margin:0;color:var(--text);font-size:16px}
+
+/* Forms below approved homepage section */
+.forms-section{padding:70px 0;background:#f7fafb}.title{text-align:center;margin-bottom:35px}.title h2{font-size:38px;margin:0 0 8px}.title p{color:var(--text);margin:0}.forms{display:grid;grid-template-columns:1fr 1fr;gap:28px}.form-card{background:#fff;border:1px solid var(--line);border-radius:12px;padding:30px}.form-card h3{font-size:27px;margin:0 0 5px}.form-card>p{color:var(--text);margin:0 0 22px}.fields{display:grid;grid-template-columns:1fr 1fr;gap:14px}.full{grid-column:1/-1}label{display:block;font-size:12px;font-weight:800;margin-bottom:5px;color:#405b78}input,select,textarea{width:100%;padding:11px;border:1px solid #cbd9e2;border-radius:6px;font:inherit}textarea{min-height:105px;resize:vertical}.submit{width:100%;margin-top:16px}.note{font-size:11px;color:#7b8c9d;margin-top:8px}
+.contact{padding:60px 0}.contact-box{max-width:900px;margin:auto;background:#f0f8f5;padding:34px;border-radius:12px}.contact-box h2{margin-top:0}
+footer{background:#f4f8fb;border-top:1px solid #e2eaf0;padding:22px 0}.foot{display:flex;align-items:center;justify-content:space-between}.foot-brand{font-weight:800;font-size:18px}.foot-tag{font-size:10px;letter-spacing:2px;margin-left:28px;color:#617798}.social{display:flex;gap:8px}.social span{width:32px;height:32px;border:1px solid #b8c8d4;border-radius:5px;display:grid;place-items:center;font-weight:bold}
+@media(max-width:1050px){.wrap{width:calc(100% - 34px)}.nav>a{display:none}.hero{height:auto}.hero-grid{grid-template-columns:1fr}.hero-copy{padding:45px 0}.hero-photo{height:390px}.aud-grid,.forms{grid-template-columns:1fr}.step-grid{grid-template-columns:1fr}.step{padding:22px}.step+.step{border-left:0;border-top:1px solid #d8e2e8}}
+@media(max-width:620px){header{height:72px}.brand{font-size:22px}.brandline{font-size:8px;letter-spacing:2px}.hero-copy{padding-left:0}h1{font-size:40px}.lead{font-size:19px}.buttons{flex-direction:column}.btn{width:100%}.hero-photo{height:300px}.aud{grid-template-columns:1fr;text-align:center;padding:25px}.circle{margin:0 auto 15px}.aud .btn{width:100%}.fields{grid-template-columns:1fr}.full{grid-column:auto}.foot{flex-direction:column;align-items:flex-start;gap:15px}.foot-tag{display:block;margin:5px 0}}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap nav">
+    <div class="identity"><div class="brand">NorthBridge Recruiting</div><div class="brandline">PEOPLE &nbsp;|&nbsp; OPPORTUNITIES &nbsp;|&nbsp; GROWTH</div></div>
+    <a class="active" href="#home">Home</a><a href="#about">About</a><a href="#opportunities">Opportunities</a><a href="#candidates">For Candidates</a><a href="#employers">For Employers</a><a href="#contact">Contact</a>
+  </div>
+</header>
+
+<main id="home">
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div class="hero-copy">
+      <div class="kicker">TALENT TODAY. BRIGHTER TOMORROW.</div>
+      <h1>Connecting People<br><span>With Opportunity</span></h1>
+      <div class="lead">Simple recruiting and staffing solutions<br>for growing businesses.</div>
+      <div class="buttons"><a class="btn green" href="#candidates">I'm Looking for a Job <span class="arrow">→</span></a><a class="btn outline" href="#employers">I Need to Hire <span class="arrow">→</span></a></div>
+    </div>
+    <div class="hero-photo"><img src="northbridge-hero.png" alt="Professional recruiting workspace with laptop, resume, plant and office desk"></div>
+  </div>
+</section>
+
+<section class="audience" id="about"><div class="wrap aud-grid">
+  <div class="aud candidate"><div class="circle"><div class="person"></div></div><div><h2>For Candidates</h2><p>Submit your resume and let us<br>connect you with great opportunities.</p><a class="btn green" href="#candidates">Submit Your Resume <span class="arrow">→</span></a></div></div>
+  <div class="aud employer"><div class="circle"><div class="brief"></div></div><div><h2>For Employers</h2><p>Tell us about your hiring needs and<br>find the right talent.</p><a class="btn navy" href="#employers">Request Talent <span class="arrow">→</span></a></div></div>
+</div></section>
+
+<section class="steps" id="opportunities"><div class="wrap step-grid">
+  <div class="step"><div class="step-icon"><div class="docicon"></div></div><h3>1. Submit</h3><p>Send your resume or hiring request.</p></div>
+  <div class="step"><div class="step-icon peopleicon">♧</div><h3>2. Get Matched</h3><p>We connect the right people and companies.</p></div>
+  <div class="step"><div class="step-icon targeticon">◎</div><h3>3. Move Forward</h3><p>Build your future with confidence.</p></div>
+</div></section>
+
+<section class="forms-section"><div class="wrap"><div class="title"><h2>Get Started</h2><p>Choose the path that fits you.</p></div><div class="forms">
+<div class="form-card" id="candidates"><h3>Submit Your Resume</h3><p>Looking for your next opportunity? Start here.</p><form onsubmit="demo(event,'Candidate')"><div class="fields"><div><label>Full Name *</label><input required></div><div><label>Email *</label><input type="email" required></div><div><label>Phone *</label><input type="tel" required></div><div><label>Location *</label><input required></div><div class="full"><label>Position / Type of Work *</label><input required></div><div class="full"><label>LinkedIn (optional)</label><input type="url" placeholder="https://"></div><div class="full"><label>Resume *</label><input type="file" accept=".pdf,.doc,.docx" required></div><div class="full"><label>Message (optional)</label><textarea></textarea></div></div><button class="btn green submit">Submit Your Resume →</button><div class="note">Resume storage will be connected after the visual layout is approved.</div></form></div>
+<div class="form-card" id="employers"><h3>Request Talent</h3><p>No account or registration required.</p><form onsubmit="demo(event,'Employer')"><div class="fields"><div><label>Company Name *</label><input required></div><div><label>Contact Name *</label><input required></div><div><label>Email *</label><input type="email" required></div><div><label>Phone (optional)</label><input type="tel"></div><div class="full"><label>Position / Worker Needed *</label><input required></div><div><label>Location / Remote *</label><input required></div><div><label>Employment Type *</label><select required><option value="">Select</option><option>Full-time</option><option>Part-time</option><option>Contract</option><option>Temporary</option><option>Other</option></select></div><div class="full"><label>Job Description / Requirements *</label><textarea required></textarea></div></div><button class="btn green submit">Submit Hiring Request →</button></form></div>
+</div></div></section>
+
+<section class="contact" id="contact"><div class="wrap"><div class="contact-box"><h2>Contact NorthBridge</h2><form onsubmit="demo(event,'Contact')"><div class="fields"><div><label>Name *</label><input required></div><div><label>Email *</label><input type="email" required></div><div class="full"><label>Message *</label><textarea required></textarea></div></div><button class="btn green submit">Send Message →</button></form></div></div></section>
+</main>
+
+<footer><div class="wrap foot"><div><span class="foot-brand">NorthBridge Recruiting</span><span class="foot-tag">PEOPLE | OPPORTUNITIES | GROWTH</span></div><div class="social"><span>in</span><span>f</span></div></div></footer>
+<script>function demo(e,t){e.preventDefault();alert(t+" form is ready visually. We will connect the submission system next.");}</script>
+</body>
+</html>
