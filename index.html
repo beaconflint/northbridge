@@ -290,9 +290,9 @@ footer{border-top:1px solid #dce6ed;background:#f8fbfd;padding:22px 0}
 
       <a href="#opportunities">Opportunities</a>
 
-      <a href="#candidates">For Candidates</a>
+      <a href="#get-started">For Candidates</a>
 
-      <a href="#employers">For Employers</a>
+      <a href="#get-started">For Employers</a>
 
       <a href="#contact">Contact</a>
 
@@ -408,7 +408,7 @@ footer{border-top:1px solid #dce6ed;background:#f8fbfd;padding:22px 0}
 
   </section>
 
-  <section class="forms-section">
+  <section class="forms-section" id="get-started">
 
     <div class="wrap">
 
@@ -468,7 +468,7 @@ footer{border-top:1px solid #dce6ed;background:#f8fbfd;padding:22px 0}
 
             <div class="field"><label>Email *</label><input required type="email" name="email"></div>
 
-            <div class="field"><label>Phone</label><input type="tel" name="phone"></div>
+            <div class="field"><label>Phone</label><input type="tel" name="phone" inputmode="numeric" autocomplete="tel" maxlength="14" placeholder="(123) 456-7890" pattern="\([0-9]{3}\) [0-9]{3}-[0-9]{4}" title="Enter a 10-digit phone number"></div>
 
             <div class="field full"><label>Position / Worker Needed *</label><input required name="position"></div>
 
@@ -641,6 +641,20 @@ function fileToBase64(file) {
     reader.readAsDataURL(file);
   });
 }
+
+const employerForm = document.getElementById('hire');
+const employerPhone = employerForm.elements['phone'];
+
+employerPhone.addEventListener('input', () => {
+  const digits = employerPhone.value.replace(/\D/g, '').slice(0, 10);
+  if (digits.length <= 3) {
+    employerPhone.value = digits;
+  } else if (digits.length <= 6) {
+    employerPhone.value = `(${digits.slice(0,3)}) ${digits.slice(3)}`;
+  } else {
+    employerPhone.value = `(${digits.slice(0,3)}) ${digits.slice(3,6)}-${digits.slice(6)}`;
+  }
+});
 
 // Employer and Contact forms will be connected separately.
 document.getElementById('hire').addEventListener('submit', e => {
