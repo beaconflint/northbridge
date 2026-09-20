@@ -56,24 +56,23 @@ h1 span{color:var(--green)}
   transform:translateX(60px);
 }
 
-/* Fade moved farther LEFT only. Hero dimensions and image positioning are unchanged. */
+/* Original compact hero restored; no enlargement. */
 .hero-photo::before{
   content:"";
   position:absolute;
   z-index:2;
   top:0;
   bottom:0;
-  left:-230px;
-  width:410px;
+  left:0;
+  width:180px;
   pointer-events:none;
   background:linear-gradient(
     90deg,
     #f7fafb 0%,
-    rgba(247,250,251,.99) 25%,
-    rgba(247,250,251,.94) 42%,
-    rgba(247,250,251,.76) 60%,
-    rgba(247,250,251,.45) 75%,
-    rgba(247,250,251,.16) 90%,
+    rgba(247,250,251,.98) 20%,
+    rgba(247,250,251,.82) 43%,
+    rgba(247,250,251,.50) 66%,
+    rgba(247,250,251,.20) 84%,
     rgba(247,250,251,0) 100%
   );
 }
