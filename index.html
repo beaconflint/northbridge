@@ -438,7 +438,7 @@ footer{border-top:1px solid #dce6ed;background:#f8fbfd;padding:22px 0}
 
             <div class="field full"><label>Position / Type of Work *</label><input required name="position"></div>
 
-            <div class="field full"><label>LinkedIn (optional)</label><input type="url" name="linkedin" placeholder="https://"></div>
+            <div class="field full"><label>LinkedIn / Website (optional)</label><input type="url" name="linkedin" placeholder="https://"></div>
 
             <div class="field full"><label>Resume *</label><input required type="file" name="resume" accept=".pdf,.doc,.docx"></div>
 
@@ -448,7 +448,7 @@ footer{border-top:1px solid #dce6ed;background:#f8fbfd;padding:22px 0}
 
           <button class="submit" type="submit">Submit Your Resume</button>
 
-          <p class="note">Resume storage will be connected after the website layout is approved.</p>
+          <p class="note" id="candidate-status" aria-live="polite"></p>
 
         </form>
 
@@ -541,19 +541,102 @@ footer{border-top:1px solid #dce6ed;background:#f8fbfd;padding:22px 0}
 </footer>
 
 <script>
+const CANDIDATE_ENDPOINT = 'https://script.google.com/macros/s/AKfycbzkBBRbVpuLULF2Jyi8SAnoXVojzDMvUn-tG44EGyJrVOUxXus1Nur_JPDF-oty0ulp/exec';
 
-document.querySelectorAll('form').forEach(form=>{
+const candidateForm = document.getElementById('apply');
+const candidateStatus = document.getElementById('candidate-status');
 
-  form.addEventListener('submit',e=>{
+candidateForm.addEventListener('submit', async (e) => {
+  e.preventDefault();
 
-    e.preventDefault();
+  const submitButton = candidateForm.querySelector('button[type="submit"]');
+  const resumeInput = candidateForm.querySelector('input[name="resume"]');
+  const resumeFile = resumeInput.files[0];
 
-    alert('The form layout is ready. We will connect submission storage next.');
+  if (!resumeFile) {
+    candidateStatus.textContent = 'Please select your resume.';
+    return;
+  }
 
-  });
+  const allowedTypes = [
+    'application/pdf',
+    'application/msword',
+    'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+  ];
 
+  const allowedExtensions = /\.(pdf|doc|docx)$/i;
+  if (!allowedTypes.includes(resumeFile.type) && !allowedExtensions.test(resumeFile.name)) {
+    candidateStatus.textContent = 'Please upload a PDF, DOC, or DOCX resume.';
+    return;
+  }
+
+  submitButton.disabled = true;
+  submitButton.textContent = 'Submitting...';
+  candidateStatus.textContent = '';
+
+  try {
+    const resumeBase64 = await fileToBase64(resumeFile);
+
+    const payload = {
+      name: candidateForm.elements['name'].value.trim(),
+      email: candidateForm.elements['email'].value.trim(),
+      phone: candidateForm.elements['phone'].value.trim(),
+      location: candidateForm.elements['location'].value.trim(),
+      position: candidateForm.elements['position'].value.trim(),
+      linkedin: candidateForm.elements['linkedin'].value.trim(),
+      message: candidateForm.elements['message'].value.trim(),
+      resume: {
+        name: resumeFile.name,
+        type: resumeFile.type || 'application/octet-stream',
+        data: resumeBase64
+      }
+    };
+
+    const response = await fetch(CANDIDATE_ENDPOINT, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify(payload)
+    });
+
+    const result = await response.json();
+
+    if (!result.success) {
+      throw new Error(result.message || 'Submission failed.');
+    }
+
+    candidateForm.reset();
+    candidateStatus.textContent = 'Thank you. Your resume was submitted successfully.';
+  } catch (error) {
+    console.error(error);
+    candidateStatus.textContent = 'Your submission could not be sent. Please try again.';
+  } finally {
+    submitButton.disabled = false;
+    submitButton.textContent = 'Submit Your Resume';
+  }
 });
 
+function fileToBase64(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => {
+      const result = String(reader.result);
+      resolve(result.split(',')[1]);
+    };
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
+
+// Employer and Contact forms will be connected separately.
+document.getElementById('hire').addEventListener('submit', e => {
+  e.preventDefault();
+  alert('Employer form connection is coming next.');
+});
+
+document.querySelector('.contact-box').addEventListener('submit', e => {
+  e.preventDefault();
+  alert('Contact form connection is coming next.');
+});
 </script>
 
 </body>
