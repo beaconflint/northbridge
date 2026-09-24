@@ -84,6 +84,7 @@
       textarea { min-height: 105px; resize: vertical; }
       .consent { display: flex; gap: 9px; align-items: flex-start; color: var(--text); font-size: 13px; }
       .consent input { width: auto; margin-top: 4px; }
+      .upload-note { margin-top: 7px; color: #6d7f91; font-size: 12px; line-height: 1.45; }
       .status { min-height: 24px; margin: 12px 0 0; color: var(--green); }
       .application-foot { padding: 16px 26px; border-top: 1px solid var(--line); display: flex; justify-content: flex-end; gap: 9px; }
       .application-foot button { width: auto; min-width: 130px; }
@@ -139,7 +140,7 @@
     <div class="overlay" id="application-overlay" aria-hidden="true">
       <form class="application" id="application-form">
         <header class="application-head"><div><h2>Apply for This Job</h2><p id="application-job"></p></div><button class="close" type="button" data-close aria-label="Close">×</button></header>
-        <div class="application-body"><input type="hidden" name="jobId" /><input type="hidden" name="jobTitle" /><div class="grid"><div class="field"><label>First name *</label><input required name="firstName" /></div><div class="field"><label>Last name *</label><input required name="lastName" /></div><div class="field"><label>Email *</label><input required type="email" name="email" /></div><div class="field"><label>Phone *</label><input required name="phone" /></div><div class="field full"><label>Current location *</label><input required name="location" placeholder="City, State" /></div><div class="field full"><label>LinkedIn profile</label><input type="url" name="linkedin" /></div><div class="field full"><label>Résumé *</label><input required type="file" name="resume" accept=".pdf,.doc,.docx" /></div><div class="field full"><label>Short message</label><textarea name="message" placeholder="Tell us briefly about your relevant experience"></textarea></div><label class="consent field full"><input required type="checkbox" name="consent" value="Yes" /><span>I agree that OakRise Point may review and use my information for recruiting purposes. The Privacy Policy applies.</span></label></div><p class="status" id="application-status" aria-live="polite"></p></div>
+        <div class="application-body"><input type="hidden" name="jobId" /><input type="hidden" name="jobTitle" /><div class="grid"><div class="field"><label>First name *</label><input required name="firstName" /></div><div class="field"><label>Last name *</label><input required name="lastName" /></div><div class="field"><label>Email *</label><input required type="email" name="email" /></div><div class="field"><label>Phone *</label><input required type="tel" name="phone" inputmode="tel" autocomplete="tel" placeholder="10-digit phone number" maxlength="20" /></div><div class="field full"><label>Current location *</label><input required name="location" placeholder="City, State" /></div><div class="field full"><label>LinkedIn profile</label><input type="url" name="linkedin" /></div><div class="field full"><label>Resume *</label><input required type="file" name="resume" accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document" /><div class="upload-note">Accepted formats: PDF, DOC, or DOCX only. Maximum file size: 10 MB. ZIP files and videos are not accepted.</div></div><div class="field full"><label>Short message</label><textarea name="message" placeholder="Tell us briefly about your relevant experience"></textarea></div><label class="consent field full"><input required type="checkbox" name="consent" value="Yes" /><span>I agree that OakRise Point may review and use my information for recruiting purposes. The Privacy Policy applies.</span></label></div><p class="status" id="application-status" aria-live="polite"></p></div>
         <footer class="application-foot"><button class="secondary" type="button" data-close>Cancel</button><button class="primary" type="submit">Submit Application</button></footer>
       </form>
     </div>
@@ -204,14 +205,17 @@
         const form = event.currentTarget;
         const status = document.getElementById('application-status');
         const button = form.querySelector('[type="submit"]');
+        const phoneDigits = String(form.elements.phone.value || '').replace(/\D/g, '');
+        if (phoneDigits.length !== 10) { status.textContent = 'Please enter a 10-digit phone number.'; form.elements.phone.focus(); return; }
         const file = form.elements.resume.files[0];
-        if (!file) { status.textContent = 'Please select your résumé.'; return; }
-        if (file.size > 10 * 1024 * 1024) { status.textContent = 'Please upload a résumé smaller than 10 MB.'; return; }
-        if (!/\.(pdf|doc|docx)$/i.test(file.name)) { status.textContent = 'Please upload a PDF, DOC, or DOCX résumé.'; return; }
+        if (!file) { status.textContent = 'Please select your resume.'; return; }
+        if (file.size > 10 * 1024 * 1024) { status.textContent = 'Please upload a resume smaller than 10 MB.'; return; }
+        if (!/\.(pdf|doc|docx)$/i.test(file.name)) { status.textContent = 'Please upload a PDF, DOC, or DOCX resume. ZIP files and videos are not accepted.'; return; }
         button.disabled = true; button.textContent = 'Submitting…'; status.textContent = '';
         try {
           const payload = Object.fromEntries(new FormData(form).entries());
           delete payload.resume;
+          payload.phone = phoneDigits;
           payload.action = 'apply';
           payload.consent = form.elements.consent.checked ? 'Yes' : '';
           payload.resume = { name: file.name, type: file.type || 'application/octet-stream', data: await fileToBase64(file) };
