@@ -145,7 +145,7 @@
     </div>
 
     <script>
-      const JOBS_ENDPOINT = 'https://script.google.com/macros/s/AKfycbzTk-DiGefNUkCdAVOeSPvXUzAU91VHZJ5iBibELf9shW85Zx9PU6K_OeRXFhQSCVd_tw/exec';
+      const JOBS_ENDPOINT = 'https://script.google.com/macros/s/AKfycbw_EohrMetkyYZibZ0Brz1fqTossn1bEvLAL_doac8MnSbXapmrzVzUWxSDGRrvshIR/exec';
       const state = { jobs: [] };
       const clean = value => value === undefined || value === null ? '' : String(value).trim();
       const escapeHtml = value => clean(value).replace(/[&<>'"]/g, character => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', "'":'&#39;', '"':'&quot;' })[character]);
