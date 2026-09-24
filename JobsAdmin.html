@@ -1,0 +1,300 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <base target="_top" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+      :root {
+        --navy: #082f61;
+        --deep: #06284f;
+        --green: #087c65;
+        --pearl: #f6f2ea;
+        --panel: #ffffff;
+        --soft: #f4f8f7;
+        --text: #20384f;
+        --muted: #64798b;
+        --line: #d5dfe2;
+        --blue-soft: #eaf1f4;
+        --green-soft: #e5f3ef;
+      }
+      * { box-sizing: border-box; }
+      body { margin: 0; background: var(--pearl); color: var(--text); font-family: Arial, Helvetica, sans-serif; font-size: 16px; line-height: 1.45; }
+      button, input, select, textarea { font: inherit; }
+      button { cursor: pointer; }
+      .topbar { min-height: 72px; background: var(--deep); color: #fff; padding: 13px 28px; display: flex; align-items: center; justify-content: space-between; gap: 18px; }
+      .brand { display: flex; align-items: center; gap: 12px; }
+      .mark { width: 40px; height: 40px; border: 1px solid rgba(255,255,255,.35); border-radius: 9px; display: grid; place-items: center; color: #8fdcc8; font-weight: 700; }
+      .brand strong { display: block; font-family: Georgia, serif; font-size: 20px; font-weight: 500; }
+      .brand span { display: block; color: #c3d4de; font-size: 13px; }
+      .private { color: #dce8ee; font-size: 13px; }
+      .nav { background: #fff; border-bottom: 1px solid var(--line); padding: 0 28px; display: flex; gap: 24px; }
+      .nav button { border: 0; border-bottom: 3px solid transparent; background: transparent; color: var(--muted); padding: 14px 0 11px; font-weight: 700; }
+      .nav button.active { color: var(--navy); border-bottom-color: var(--green); }
+      main { max-width: 1400px; margin: auto; padding: 28px; }
+      .heading { display: flex; justify-content: space-between; align-items: flex-end; gap: 18px; margin-bottom: 18px; }
+      h1 { margin: 0 0 5px; color: var(--navy); font-family: Georgia, serif; font-size: 32px; font-weight: 500; }
+      .heading p { margin: 0; color: var(--muted); }
+      .primary, .secondary { min-height: 42px; border-radius: 8px; padding: 9px 14px; font-weight: 700; }
+      .primary { border: 0; background: var(--green); color: #fff; }
+      .secondary { border: 1px solid var(--green); background: #fff; color: var(--green); }
+      .tools { display: grid; grid-template-columns: minmax(260px, 1fr) 210px; gap: 10px; margin-bottom: 16px; }
+      .control { min-height: 42px; width: 100%; border: 1px solid var(--line); border-radius: 8px; background: #fff; color: var(--text); padding: 0 12px; }
+      .list { display: grid; gap: 15px; }
+      .lead { display: grid; grid-template-columns: minmax(0, 1fr) 220px; overflow: hidden; background: #fff; border: 1px solid var(--line); border-radius: 12px; }
+      .lead-main { padding: 21px 22px; }
+      .lead-side { padding: 19px 16px; background: var(--soft); border-left: 1px solid var(--line); display: flex; flex-direction: column; justify-content: space-between; gap: 18px; }
+      .lead-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 15px; }
+      .company { color: var(--navy); font-size: 20px; font-weight: 700; }
+      .role { margin-top: 2px; font-weight: 700; }
+      .badge { white-space: nowrap; border-radius: 999px; padding: 5px 9px; background: var(--green-soft); color: var(--green); font-size: 12px; font-weight: 700; }
+      .badge.unclear { background: #fff0d6; color: #855807; }
+      .meta { margin: 11px 0 16px; display: flex; flex-wrap: wrap; gap: 7px 16px; color: var(--muted); font-size: 13px; }
+      .details { display: grid; grid-template-columns: 1.2fr 1fr; gap: 24px; }
+      .label { margin-bottom: 7px; color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: .06em; }
+      .requirements { margin: 0; white-space: pre-wrap; }
+      .skills { display: flex; flex-wrap: wrap; gap: 7px; }
+      .skill { padding: 5px 8px; border-radius: 6px; background: var(--blue-soft); color: var(--navy); font-size: 13px; }
+      .source { display: inline-block; margin-top: 13px; color: var(--green); font-weight: 700; text-decoration: none; }
+      .check { color: var(--muted); font-size: 13px; }
+      .check strong { color: var(--text); }
+      .actions { display: grid; gap: 9px; }
+      .actions button { width: 100%; }
+      .small-note { color: var(--muted); font-size: 12px; text-align: center; }
+      .empty, .loading { background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: 45px 24px; text-align: center; color: var(--muted); }
+      .job-row { background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: 19px 21px; display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 20px; align-items: center; }
+      .job-row h2 { margin: 0 0 5px; color: var(--navy); font-size: 20px; }
+      .job-meta { color: var(--muted); font-size: 13px; }
+      .job-actions { display: flex; gap: 8px; }
+      .overlay { position: fixed; inset: 0; z-index: 10; display: none; justify-content: flex-end; background: rgba(5,25,46,.5); }
+      .overlay.open { display: flex; }
+      .drawer { width: min(650px, 100%); min-height: 100vh; background: #fff; display: flex; flex-direction: column; }
+      .drawer-head { background: var(--deep); color: #fff; padding: 21px 24px; display: flex; justify-content: space-between; gap: 18px; }
+      .drawer-head h2 { margin: 0 0 4px; font-family: Georgia, serif; font-size: 26px; font-weight: 500; }
+      .drawer-head p { margin: 0; color: #c5d6df; font-size: 13px; }
+      .close { width: 38px; height: 38px; border: 1px solid rgba(255,255,255,.35); border-radius: 8px; background: transparent; color: #fff; font-size: 22px; }
+      .drawer-body { flex: 1; overflow: auto; padding: 22px 24px; }
+      .field { margin-bottom: 16px; }
+      .field label { display: block; margin-bottom: 6px; color: var(--muted); font-size: 13px; font-weight: 700; }
+      .field input, .field select, .field textarea { width: 100%; border: 1px solid var(--line); border-radius: 8px; padding: 10px 11px; color: var(--text); background: #fff; }
+      .field textarea { min-height: 120px; resize: vertical; line-height: 1.5; }
+      .two { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+      .privacy { margin-bottom: 16px; border-radius: 8px; padding: 11px 12px; background: var(--green-soft); color: var(--green); font-size: 13px; }
+      .drawer-foot { border-top: 1px solid var(--line); padding: 16px 24px; display: flex; justify-content: flex-end; gap: 9px; }
+      .status { margin-top: 10px; min-height: 22px; color: var(--green); font-size: 13px; }
+      [hidden] { display: none !important; }
+      @media (max-width: 760px) {
+        main { padding: 20px 13px; }
+        .heading { align-items: flex-start; flex-direction: column; }
+        .tools, .lead, .details, .two, .job-row { grid-template-columns: 1fr; }
+        .lead-side { border-left: 0; border-top: 1px solid var(--line); }
+        .job-actions { flex-wrap: wrap; }
+        .private { display: none; }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="brand"><div class="mark">OR</div><div><strong>Oak Rise Point</strong><span>Private recruiting workspace</span></div></div>
+      <div class="private">Only you can access this page</div>
+    </header>
+    <nav class="nav" aria-label="Workspace views">
+      <button class="active" type="button" data-view="leads">Client Requirements</button>
+      <button type="button" data-view="jobs">Public Job Listings</button>
+    </nav>
+    <main>
+      <section id="leads-view">
+        <div class="heading"><div><h1>Client Job Requirements</h1><p>Verified direct employers appear first.</p></div><button class="primary" type="button" id="add-lead">Add Client Requirement</button></div>
+        <div class="tools"><input class="control" id="search" type="search" placeholder="Search company, job title, or technology" /><select class="control" id="classification"><option value="">All employer types</option><option value="verified direct employer">Verified direct employers</option><option value="unclear">Unclear sources</option><option value="staffing agency">Staffing agencies</option></select></div>
+        <div class="list" id="lead-list"><div class="loading">Loading client requirements…</div></div>
+      </section>
+      <section id="jobs-view" hidden>
+        <div class="heading"><div><h1>Public Job Listings</h1><p>Only active jobs appear on oakrisepoint.net.</p></div></div>
+        <div class="list" id="job-list"><div class="loading">Loading public jobs…</div></div>
+      </section>
+    </main>
+
+    <div class="overlay" id="email-drawer" aria-hidden="true">
+      <section class="drawer" aria-label="Client email draft">
+        <header class="drawer-head"><div><h2>Client Email Draft</h2><p>Review and copy into Gmail.</p></div><button class="close" type="button" data-close>×</button></header>
+        <div class="drawer-body"><div class="field"><label for="email-subject">Subject</label><input id="email-subject" /></div><div class="field"><label for="email-body">Email</label><textarea id="email-body" style="min-height:390px"></textarea></div><p class="status" id="email-status"></p></div>
+        <footer class="drawer-foot"><button class="secondary" type="button" data-close>Close</button><button class="primary" type="button" id="copy-email">Copy Email</button></footer>
+      </section>
+    </div>
+
+    <div class="overlay" id="job-drawer" aria-hidden="true">
+      <form class="drawer" id="job-form">
+        <header class="drawer-head"><div><h2>Public Job Draft</h2><p>Review before publishing to your Jobs page.</p></div><button class="close" type="button" data-close>×</button></header>
+        <div class="drawer-body"><div class="privacy">The client company name and contact information will not appear publicly.</div><input type="hidden" name="clientLeadId" /><input type="hidden" name="jobId" /><div class="field"><label>Displayed employer</label><input value="Oak Rise Point LLC" disabled /></div><div class="field"><label>Job title *</label><input required name="jobTitle" /></div><div class="two"><div class="field"><label>Location *</label><input required name="location" /></div><div class="field"><label>Work arrangement</label><select name="workArrangement"><option value="">Select</option><option>Remote</option><option>Hybrid</option><option>On-site</option></select></div></div><div class="two"><div class="field"><label>Employment type</label><select name="employmentType"><option value="">Select</option><option>Contract</option><option>Contract-to-hire</option><option>Full-time</option><option>Part-time</option></select></div><div class="field"><label>Pay range</label><input name="payRange" placeholder="Only if approved" /></div></div><div class="field"><label>Public description *</label><textarea required name="publicDescription"></textarea></div><div class="field"><label>Requirements *</label><textarea required name="requirements"></textarea></div><div class="field"><label>Skills</label><input name="skills" placeholder="Separate skills with commas" /></div><div class="field"><label>Expiration date</label><input type="date" name="expiresAt" /></div><p class="status" id="job-status"></p></div>
+        <footer class="drawer-foot"><button class="secondary" type="button" data-close>Cancel</button><button class="primary" type="submit">Publish Job</button></footer>
+      </form>
+    </div>
+
+    <div class="overlay" id="lead-drawer" aria-hidden="true">
+      <form class="drawer" id="lead-form">
+        <header class="drawer-head"><div><h2>Add Client Requirement</h2><p>Use public business information only.</p></div><button class="close" type="button" data-close>×</button></header>
+        <div class="drawer-body"><input type="hidden" name="leadId" /><div class="field"><label>Company *</label><input required name="company" /></div><div class="field"><label>Employer classification *</label><select required name="classification"><option value="">Select</option><option>Verified Direct Employer</option><option>Unclear</option><option>Staffing Agency</option></select></div><div class="field"><label>Verification notes</label><input name="verification" placeholder="Official company career page, domain verified…" /></div><div class="field"><label>Job title *</label><input required name="jobTitle" /></div><div class="two"><div class="field"><label>Location *</label><input required name="location" /></div><div class="field"><label>Employment type</label><input name="employmentType" /></div></div><div class="field"><label>Skills</label><input name="skills" placeholder="PowerCenter, SQL, Snowflake…" /></div><div class="field"><label>Requirements *</label><textarea required name="requirements"></textarea></div><div class="field"><label>Original posting URL *</label><input required type="url" name="sourceUrl" /></div><div class="field"><label>Posted date</label><input type="date" name="postedDate" /></div><div class="field"><label>Private notes</label><textarea name="notes"></textarea></div><p class="status" id="lead-status"></p></div>
+        <footer class="drawer-foot"><button class="secondary" type="button" data-close>Cancel</button><button class="primary" type="submit">Save Requirement</button></footer>
+      </form>
+    </div>
+
+    <script>
+      const state = { leads: [], jobs: [] };
+      const byId = id => document.getElementById(id);
+      const clean = value => value === undefined || value === null ? '' : String(value).trim();
+      const escapeHtml = value => clean(value).replace(/[&<>'"]/g, character => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', "'":'&#39;', '"':'&quot;' })[character]);
+      const splitSkills = value => clean(value).split(/[,|]/).map(item => item.trim()).filter(Boolean);
+
+      function openDrawer(id) { byId(id).classList.add('open'); byId(id).setAttribute('aria-hidden', 'false'); }
+      function closeDrawers() { document.querySelectorAll('.overlay').forEach(item => { item.classList.remove('open'); item.setAttribute('aria-hidden', 'true'); }); }
+
+      function loadWorkspace() {
+        google.script.run.withSuccessHandler(data => {
+          state.leads = data.leads || [];
+          state.jobs = data.jobs || [];
+          renderLeads();
+          renderJobs();
+        }).withFailureHandler(error => {
+          byId('lead-list').innerHTML = '<div class="empty">' + escapeHtml(error.message || 'The workspace could not be loaded.') + '</div>';
+        }).getRecruitingWorkspaceData();
+      }
+
+      function renderLeads() {
+        const query = byId('search').value.toLowerCase();
+        const classification = byId('classification').value.toLowerCase();
+        const leads = state.leads.filter(lead => {
+          const text = [lead.Company, lead['Job Title'], lead.Skills, lead.Requirements].join(' ').toLowerCase();
+          return (!query || text.includes(query)) && (!classification || clean(lead.Classification).toLowerCase() === classification);
+        });
+        if (!leads.length) {
+          byId('lead-list').innerHTML = '<div class="empty">No client requirements match this view.</div>';
+          return;
+        }
+        byId('lead-list').innerHTML = leads.map(lead => {
+          const classificationText = clean(lead.Classification) || 'Unclear';
+          const badgeClass = classificationText.toLowerCase() === 'unclear' ? 'badge unclear' : 'badge';
+          const skills = splitSkills(lead.Skills).map(skill => '<span class="skill">' + escapeHtml(skill) + '</span>').join('');
+          return '<article class="lead"><div class="lead-main"><div class="lead-head"><div><div class="company">' + escapeHtml(lead.Company) + '</div><div class="role">' + escapeHtml(lead['Job Title']) + '</div></div><span class="' + badgeClass + '">' + escapeHtml(classificationText) + '</span></div><div class="meta"><span>' + escapeHtml(lead.Location) + '</span><span>' + escapeHtml(lead['Employment Type']) + '</span><span>Review: ' + escapeHtml(formatDate(lead['Review Date'])) + '</span></div><div class="details"><div><div class="label">Client requirements</div><div class="requirements">' + escapeHtml(lead.Requirements) + '</div></div><div><div class="label">Requested skills</div><div class="skills">' + (skills || '<span class="skill">Not listed</span>') + '</div><a class="source" href="' + escapeHtml(lead['Source URL']) + '" target="_blank" rel="noopener">View original posting ↗</a></div></div></div><aside class="lead-side"><div class="check"><strong>Verification</strong><br>' + escapeHtml(lead.Verification || 'Needs review') + '<br><br><strong>Last checked</strong><br>' + escapeHtml(formatDate(lead['Last Checked'])) + '</div><div class="actions"><button class="primary" type="button" data-email="' + escapeHtml(lead['Lead ID']) + '">Generate Client Email</button><button class="secondary" type="button" data-job="' + escapeHtml(lead['Lead ID']) + '">Create Public Job Draft</button><div class="small-note">Use after the client agrees</div></div></aside></article>';
+        }).join('');
+        document.querySelectorAll('[data-email]').forEach(button => button.addEventListener('click', () => openEmail(button.dataset.email)));
+        document.querySelectorAll('[data-job]').forEach(button => button.addEventListener('click', () => openJobDraft(button.dataset.job)));
+      }
+
+      function renderJobs() {
+        if (!state.jobs.length) {
+          byId('job-list').innerHTML = '<div class="empty">No public jobs have been created yet.</div>';
+          return;
+        }
+        byId('job-list').innerHTML = state.jobs.slice().reverse().map(job => {
+          const active = clean(job.Status).toLowerCase() === 'active';
+          return '<article class="job-row"><div><h2>' + escapeHtml(job['Job Title']) + '</h2><div class="job-meta">' + escapeHtml(job['Job ID']) + ' · ' + escapeHtml(job.Location) + ' · ' + escapeHtml(job.Status) + ' · Expires ' + escapeHtml(formatDate(job['Expires At'])) + '</div></div><div class="job-actions"><button class="secondary" type="button" data-edit-job="' + escapeHtml(job['Job ID']) + '">Edit</button><button class="primary" type="button" data-toggle-job="' + escapeHtml(job['Job ID']) + '" data-active="' + String(active) + '">' + (active ? 'Close Job' : 'Reopen Job') + '</button></div></article>';
+        }).join('');
+        document.querySelectorAll('[data-edit-job]').forEach(button => button.addEventListener('click', () => editJob(button.dataset.editJob)));
+        document.querySelectorAll('[data-toggle-job]').forEach(button => button.addEventListener('click', () => toggleJob(button.dataset.toggleJob, button.dataset.active === 'true')));
+      }
+
+      function openEmail(leadId) {
+        const lead = state.leads.find(item => clean(item['Lead ID']) === clean(leadId));
+        if (!lead) return;
+        byId('email-subject').value = 'Staffing support for your ' + clean(lead['Job Title']) + ' opening';
+        byId('email-body').value = 'Hello Hiring Team,\n\nI noticed that ' + clean(lead.Company) + ' is seeking a ' + clean(lead['Job Title']) + '. Oak Rise Point helps employers connect with qualified IT professionals for contract and direct-hire needs.\n\nBased on the published requirements, we can focus on candidates with experience in ' + (clean(lead.Skills) || 'the technologies required for this position') + '. I would be glad to learn more about your hiring timeline and discuss whether our recruiting support could be useful.\n\nWould you be available for a brief conversation this week?\n\nBest regards,\nOxana Verdes\nOak Rise Point LLC\ncontact@oakrisepoint.net\nwww.oakrisepoint.net';
+        byId('email-status').textContent = '';
+        openDrawer('email-drawer');
+      }
+
+      function openJobDraft(leadId) {
+        const lead = state.leads.find(item => clean(item['Lead ID']) === clean(leadId));
+        if (!lead) return;
+        const form = byId('job-form');
+        form.reset();
+        form.elements.clientLeadId.value = leadId;
+        form.elements.jobTitle.value = clean(lead['Job Title']);
+        form.elements.location.value = clean(lead.Location);
+        form.elements.employmentType.value = selectOption(form.elements.employmentType, clean(lead['Employment Type']));
+        form.elements.publicDescription.value = 'Oak Rise Point is seeking a ' + clean(lead['Job Title']) + ' for one of our clients. The ideal candidate will have experience with ' + (clean(lead.Skills) || 'the technologies required for this position') + '.';
+        form.elements.requirements.value = clean(lead.Requirements);
+        form.elements.skills.value = clean(lead.Skills);
+        const expiration = new Date(); expiration.setDate(expiration.getDate() + 30);
+        form.elements.expiresAt.value = expiration.toISOString().slice(0, 10);
+        byId('job-status').textContent = '';
+        openDrawer('job-drawer');
+      }
+
+      function editJob(jobId) {
+        const job = state.jobs.find(item => clean(item['Job ID']) === clean(jobId));
+        if (!job) return;
+        const form = byId('job-form');
+        form.reset();
+        form.elements.jobId.value = clean(job['Job ID']);
+        form.elements.clientLeadId.value = clean(job['Client Lead ID']);
+        form.elements.jobTitle.value = clean(job['Job Title']);
+        form.elements.location.value = clean(job.Location);
+        form.elements.workArrangement.value = selectOption(form.elements.workArrangement, clean(job['Work Arrangement']));
+        form.elements.employmentType.value = selectOption(form.elements.employmentType, clean(job['Employment Type']));
+        form.elements.payRange.value = clean(job['Pay Range']);
+        form.elements.publicDescription.value = clean(job['Public Description']);
+        form.elements.requirements.value = clean(job.Requirements);
+        form.elements.skills.value = clean(job.Skills);
+        form.elements.expiresAt.value = dateInputValue(job['Expires At']);
+        openDrawer('job-drawer');
+      }
+
+      function toggleJob(jobId, isActive) {
+        const runner = google.script.run
+          .withSuccessHandler(loadWorkspace)
+          .withFailureHandler(error => alert(error.message || 'The job could not be updated.'));
+        if (isActive) runner.closePublicJob(jobId);
+        else runner.reopenPublicJob(jobId);
+      }
+
+      function selectOption(select, wanted) {
+        const option = Array.from(select.options).find(item => item.value.toLowerCase() === wanted.toLowerCase());
+        return option ? option.value : '';
+      }
+
+      function formatDate(value) {
+        if (!value) return 'Not set';
+        const date = new Date(value);
+        return Number.isNaN(date.getTime()) ? clean(value) : date.toLocaleDateString();
+      }
+
+      function dateInputValue(value) {
+        if (!value) return '';
+        const date = new Date(value);
+        return Number.isNaN(date.getTime()) ? '' : date.toISOString().slice(0, 10);
+      }
+
+      document.querySelectorAll('[data-close]').forEach(button => button.addEventListener('click', closeDrawers));
+      document.querySelectorAll('.overlay').forEach(overlay => overlay.addEventListener('click', event => { if (event.target === overlay) closeDrawers(); }));
+      document.querySelectorAll('[data-view]').forEach(button => button.addEventListener('click', () => {
+        document.querySelectorAll('[data-view]').forEach(item => item.classList.toggle('active', item === button));
+        byId('leads-view').hidden = button.dataset.view !== 'leads';
+        byId('jobs-view').hidden = button.dataset.view !== 'jobs';
+      }));
+      byId('search').addEventListener('input', renderLeads);
+      byId('classification').addEventListener('change', renderLeads);
+      byId('add-lead').addEventListener('click', () => { byId('lead-form').reset(); byId('lead-status').textContent = ''; openDrawer('lead-drawer'); });
+      byId('copy-email').addEventListener('click', async () => {
+        const text = 'Subject: ' + byId('email-subject').value + '\n\n' + byId('email-body').value;
+        try { await navigator.clipboard.writeText(text); byId('email-status').textContent = 'Email copied. Review it once more before sending.'; }
+        catch (error) { byId('email-status').textContent = 'Select the email text and copy it manually.'; }
+      });
+      byId('lead-form').addEventListener('submit', event => {
+        event.preventDefault();
+        const form = event.currentTarget;
+        const data = Object.fromEntries(new FormData(form).entries());
+        byId('lead-status').textContent = 'Saving…';
+        google.script.run.withSuccessHandler(() => { closeDrawers(); loadWorkspace(); }).withFailureHandler(error => { byId('lead-status').textContent = error.message || 'The requirement could not be saved.'; }).saveClientLead(data);
+      });
+      byId('job-form').addEventListener('submit', event => {
+        event.preventDefault();
+        const form = event.currentTarget;
+        const data = Object.fromEntries(new FormData(form).entries());
+        byId('job-status').textContent = 'Publishing…';
+        google.script.run.withSuccessHandler(() => { closeDrawers(); loadWorkspace(); document.querySelector('[data-view="jobs"]').click(); }).withFailureHandler(error => { byId('job-status').textContent = error.message || 'The job could not be published.'; }).publishPublicJob(data);
+      });
+      document.addEventListener('keydown', event => { if (event.key === 'Escape') closeDrawers(); });
+      loadWorkspace();
+    </script>
+  </body>
+</html>
