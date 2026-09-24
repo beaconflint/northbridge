@@ -106,7 +106,7 @@
     <header>
       <div class="nav">
         <a class="brand" href="index.html" aria-label="OakRise Point home"><img class="brand-logo" src="oakrise-point-logo.png" alt="OakRise Point Solutions" /></a>
-        <nav><a href="index.html">Home</a><a href="index.html#about">About</a><a class="active" href="jobs.html">Available Jobs</a><a href="index.html#contact">Contact</a></nav>
+        <nav><a href="index.html">Home</a><a href="index.html#about">About</a><a class="active" href="jobs.html">Jobs</a><a href="index.html#apply">Candidates</a><a href="index.html#hire">Employers</a><a href="index.html#contact">Contact</a></nav>
       </div>
     </header>
     <main>
@@ -126,8 +126,7 @@
     </div>
 
     <script>
-      // The separate Google Apps Script URL will be added after deployment.
-      const JOBS_ENDPOINT = '';
+      const JOBS_ENDPOINT = 'REPLACE_WITH_NEW_JOBS_WEB_APP_URL';
       const state = { jobs: [] };
       const clean = value => value === undefined || value === null ? '' : String(value).trim();
       const escapeHtml = value => clean(value).replace(/[&<>'"]/g, character => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', "'":'&#39;', '"':'&quot;' })[character]);
@@ -135,7 +134,7 @@
 
       async function loadJobs() {
         const list = document.getElementById('jobs-list');
-        if (!JOBS_ENDPOINT) {
+        if (JOBS_ENDPOINT.startsWith('REPLACE_')) {
           list.innerHTML = '<div class="empty">The new Jobs page is ready. Current openings will appear here after the separate jobs service is connected.</div>';
           return;
         }
