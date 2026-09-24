@@ -59,7 +59,7 @@
       .loading, .empty, .error { padding: 48px 24px; border: 1px solid var(--line); border-radius: 12px; background: var(--card); color: var(--text); text-align: center; }
       .error { color: #8a3e2b; }
       footer { background: #203746; color: #fff; padding: 28px 0; }
-      .footer { display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+      .footer { display: flex; align-items: center; justify-content: flex-start; gap: 28px; }
       .footer a { color: #8fdcc8; }
       .overlay { position: fixed; inset: 0; z-index: 30; display: none; justify-content: flex-end; background: rgba(9,32,51,.56); }
       .overlay.open { display: flex; }
@@ -106,7 +106,7 @@
     <header>
       <div class="nav">
         <a class="brand" href="index.html" aria-label="OakRise Point home"><img class="brand-logo" src="oakrise-point-logo.png" alt="OakRise Point Solutions" /></a>
-        <nav><a href="index.html">Home</a><a href="index.html#about">About</a><a class="active" href="jobs.html">Jobs</a><a href="index.html#apply">Candidates</a><a href="index.html#hire">Employers</a><a href="index.html#contact">Contact</a></nav>
+        <nav><a href="index.html">Home</a><a href="index.html#about">About</a><a class="active" href="jobs.html">Available Jobs</a><a href="index.html#contact">Contact</a></nav>
       </div>
     </header>
     <main>
@@ -115,7 +115,7 @@
         <div class="jobs" id="jobs-list"><div class="loading">Loading current opportunities…</div></div>
       </div>
     </main>
-    <footer><div class="wrap footer"><div>© 2026 OakRise Point LLC</div><a href="privacy-policy.html">Privacy Policy</a><a href="index.html#contact">Contact Us</a></div></footer>
+    <footer><div class="wrap footer"><div>© 2026 OakRise Point LLC</div><a href="privacy-policy.html">Privacy Policy</a></div></footer>
 
     <div class="overlay" id="application-overlay" aria-hidden="true">
       <form class="application" id="application-form">
@@ -126,7 +126,7 @@
     </div>
 
     <script>
-      const JOBS_ENDPOINT = 'REPLACE_WITH_NEW_JOBS_WEB_APP_URL';
+      const JOBS_ENDPOINT = 'https://script.google.com/macros/s/AKfycbzTk-DiGefNUkCdAVOeSPvXUzAU91VHZJ5iBibELf9shW85Zx9PU6K_OeRXFhQSCVd_tw/exec';
       const state = { jobs: [] };
       const clean = value => value === undefined || value === null ? '' : String(value).trim();
       const escapeHtml = value => clean(value).replace(/[&<>'"]/g, character => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', "'":'&#39;', '"':'&quot;' })[character]);
