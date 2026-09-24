@@ -50,7 +50,6 @@
       .description { margin: 0 0 16px; color: #365474; }
       .skills { display: flex; flex-wrap: wrap; gap: 7px; }
       .skill { padding: 5px 9px; border-radius: 6px; background: var(--softblue); color: var(--navy); font-size: 13px; }
-      .details { margin-top: 18px; padding-top: 18px; border-top: 1px solid var(--line); color: #365474; white-space: pre-wrap; }
       .job-side { padding: 24px 18px; background: var(--pearl2); border-left: 1px solid var(--line); display: flex; flex-direction: column; justify-content: space-between; gap: 20px; }
       .reviewed { color: var(--text); font-size: 13px; }
       .reviewed strong { display: block; margin-top: 4px; color: var(--navy); }
@@ -178,9 +177,8 @@
         list.innerHTML = jobs.map(job => {
           const skills = splitSkills(job.skills).map(skill => '<span class="skill">' + escapeHtml(skill) + '</span>').join('');
           const metadata = [job.location, job.workArrangement, job.employmentType, job.payRange].filter(Boolean).map(item => '<span>' + escapeHtml(item) + '</span>').join('');
-          return '<article class="job"><div class="job-main"><div class="job-head"><div><h2 class="job-title">' + escapeHtml(job.jobTitle) + '</h2><div class="job-id">Job ID: ' + escapeHtml(job.jobId) + '</div></div><span class="badge">Actively recruiting</span></div><div class="meta">' + metadata + '</div><p class="description">' + escapeHtml(job.publicDescription) + '</p><div class="skills">' + skills + '</div><div class="details" id="details-' + escapeHtml(job.jobId) + '" hidden>' + escapeHtml(job.requirements) + '</div></div><aside class="job-side"><div class="reviewed">Applications reviewed by<strong>OakRise Point LLC</strong></div><div class="actions"><button class="secondary" type="button" data-details="' + escapeHtml(job.jobId) + '">View Full Details</button><button class="primary" type="button" data-apply="' + escapeHtml(job.jobId) + '">Apply for This Job</button></div></aside></article>';
+          return '<article class="job"><div class="job-main"><div class="job-head"><div><h2 class="job-title">' + escapeHtml(job.jobTitle) + '</h2><div class="job-id">Job ID: ' + escapeHtml(job.jobId) + '</div></div><span class="badge">Actively recruiting</span></div><div class="meta">' + metadata + '</div><p class="description">' + escapeHtml(job.publicDescription) + '</p><div class="skills">' + skills + '</div></div><aside class="job-side"><div class="reviewed">Applications reviewed by<strong>OakRise Point LLC</strong></div><div class="actions"><button class="primary" type="button" data-apply="' + escapeHtml(job.jobId) + '">Apply for This Job</button></div></aside></article>';
         }).join('');
-        document.querySelectorAll('[data-details]').forEach(button => button.addEventListener('click', () => { const details = document.getElementById('details-' + button.dataset.details); details.hidden = !details.hidden; button.textContent = details.hidden ? 'View Full Details' : 'Hide Details'; }));
         document.querySelectorAll('[data-apply]').forEach(button => button.addEventListener('click', () => openApplication(button.dataset.apply)));
       }
 
